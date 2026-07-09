@@ -1,33 +1,30 @@
 heart.addEventListener("click", () => {
 
   count++;
+
   score.innerHTML = `Caught : ${count} / 5`;
 
-  // Heart har click ke baad nayi position pe jayega
-  moveHeart();
-
   if (count >= 5) {
+
     setTimeout(() => {
+
       showPage(2);
-    }, 700);
+
+    },700);
+
   }
 
 });
 
 function moveHeart(){
 
-  const card = document.querySelector("#page2 .card");
+const x=Math.random()*250+80;
+const y=Math.random()*220+120;
 
-  const maxX = card.clientWidth - 100;
-  const maxY = card.clientHeight - 120;
-
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
-
-  heart.style.left = x + "px";
-  heart.style.top = y + "px";
+heart.style.left=x+"px";
+heart.style.top=y+"px";
 
 }
 
-// Mouse paas aane par nahi bhagega
-// Sirf click hone ke baad position change hogi
+heart.addEventListener("mouseenter",moveHeart);
+heart.addEventListener("touchstart",moveHeart);
