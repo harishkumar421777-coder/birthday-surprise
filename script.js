@@ -1,209 +1,210 @@
-// Pages
-const pages = document.querySelectorAll(".page");
-
-function showPage(index) {
-  pages.forEach((page) => page.classList.remove("active"));
-  pages[index].classList.add("active");
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
-// Buttons
-const startBtn = document.getElementById("startBtn");
-const heart = document.getElementById("heart");
-const score = document.getElementById("score");
-const gift = document.getElementById("gift");
-const blowBtn = document.getElementById("blowBtn");
-const flame = document.getElementById("flame");
-const restart = document.getElementById("restart");
-const letter = document.getElementById("letter");
-
-// Start
-startBtn.addEventListener("click", () => {
-  showPage(1);
-});
-
-// ---------------- HEART GAME ----------------
-
-let count = 0;
-
-heart.addEventListener("click", () => {
-
-  count++;
-
-  score.innerHTML = `Caught : ${count} / 5`;
-
-  if (count >= 5) {
-
-    setTimeout(() => {
-
-      showPage(2);
-
-    },700);
-
-  }
-
-});
-
-function moveHeart(){
-
-const x=Math.random()*250+80;
-const y=Math.random()*220+120;
-
-heart.style.left=x+"px";
-heart.style.top=y+"px";
-
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ffd6e8,#fff0f6);
 }
 
-heart.addEventListener("mouseenter",moveHeart);
-heart.addEventListener("touchstart",moveHeart);
-
-// ---------------- GIFT ----------------
-
-gift.addEventListener("click",()=>{
-
-gift.innerHTML="💝";
-
-gift.style.transform="scale(1.3) rotate(15deg)";
-
-setTimeout(()=>{
-
-showPage(3);
-
-},1200);
-
-});
-
-// ---------------- CAKE ----------------
-
-blowBtn.addEventListener("click",()=>{
-
-flame.style.display="none";
-
-createConfetti();
-
-setTimeout(()=>{
-
-showPage(4);
-
-typeLetter();
-
-},1200);
-
-});
-
-// ---------------- TYPEWRITER ----------------
-
-const text=`
-
-Happy Birthday My Love ❤️
-
-Every moment with you is my favourite memory.
-
-Thank you for making my life beautiful.
-
-I promise to stay beside you,
-care for you,
-annoy you,
-love you,
-and make you smile forever.
-
-You are my safest place.
-
-I Love You ❤️
-
-`;
-
-let i=0;
-
-function typeLetter(){
-
-letter.innerHTML="";
-
-i=0;
-
-let typing=setInterval(()=>{
-
-letter.innerHTML+=text.charAt(i);
-
-i++;
-
-if(i>=text.length){
-
-clearInterval(typing);
-
+.page{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+opacity:0;
+pointer-events:none;
+transition:.6s;
 }
 
-},40);
-
+.page.active{
+opacity:1;
+pointer-events:auto;
 }
 
-// ---------------- CONFETTI ----------------
+.card{
+position:relative;
+width:90%;
+max-width:650px;
+padding:40px;
+text-align:center;
+background:rgba(255,255,255,.45);
+backdrop-filter:blur(18px);
+border-radius:25px;
+box-shadow:0 15px 40px rgba(255,105,180,.2);
+overflow:hidden;
+}
 
-function createConfetti(){
+h1{
+font-family:'Pacifico',cursive;
+font-size:2.8rem;
+color:#ff3d81;
+margin-bottom:20px;
+}
 
-const area=document.getElementById("confetti");
+p{
+font-size:18px;
+color:#555;
+line-height:1.7;
+margin-bottom:20px;
+}
 
-for(let i=0;i<150;i++){
+button{
+padding:15px 35px;
+border:none;
+border-radius:35px;
+background:#ff4f92;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+}
 
-const c=document.createElement("div");
+button:hover{
+transform:scale(1.08);
+background:#ff2f73;
+}
 
-c.className="confetti";
+#heart{
+position:absolute;
+left:100px;
+top:220px;
+font-size:70px;
+cursor:pointer;
+user-select:none;
+transition:left .35s ease, top .35s ease, transform .2s;
+animation:beat 1s infinite;
+}
 
-c.style.left=Math.random()*100+"vw";
+#gift{
+font-size:100px;
+cursor:pointer;
+transition:.4s;
+}
 
-c.style.top="-20px";
+#gift:hover{
+transform:scale(1.15) rotate(10deg);
+}
 
-c.style.background=`hsl(${Math.random()*360},90%,60%)`;
+#cake{
+position:relative;
+width:170px;
+height:140px;
+margin:25px auto;
+}
 
-c.style.animationDuration=(Math.random()*2+2)+"s";
+.cake-body{
+position:absolute;
+bottom:0;
+width:170px;
+height:90px;
+background:#ff5d96;
+border-radius:20px;
+}
 
-c.style.transform=`rotate(${Math.random()*360}deg)`;
+#flame{
+position:absolute;
+top:-15px;
+left:76px;
+width:18px;
+height:28px;
+background:gold;
+border-radius:50%;
+box-shadow:0 0 20px orange;
+animation:flicker .2s infinite alternate;
+}
 
-area.appendChild(c);
+.gallery img{
+width:240px;
+height:320px;
+object-fit:cover;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+transition:.4s;
+}
 
-setTimeout(()=>{
+.gallery img:hover{
+transform:scale(1.05);
+}
 
-c.remove();
+#hearts,
+#confetti{
+position:fixed;
+inset:0;
+pointer-events:none;
+overflow:hidden;
+}
 
-},5000);
+.floating-heart{
+position:absolute;
+font-size:20px;
+animation:float 8s linear forwards;
+opacity:.7;
+}
 
+.confetti{
+position:absolute;
+width:10px;
+height:16px;
+animation:fall 3s linear forwards;
+}
+
+@keyframes beat{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.15);}
+}
+
+@keyframes flicker{
+from{transform:scale(.9);}
+to{transform:scale(1.1);}
+}
+
+@keyframes float{
+0%{
+transform:translateY(110vh);
+}
+100%{
+transform:translateY(-100px);
+}
+}
+
+@keyframes fall{
+0%{
+transform:translateY(-50px) rotate(0);
+opacity:1;
+}
+100%{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+}
+
+@media(max-width:768px){
+
+.card{
+padding:25px;
+}
+
+h1{
+font-size:2rem;
+}
+
+#heart{
+font-size:60px;
+}
+
+.gallery img{
+width:180px;
+height:240px;
 }
 
 }
-
-// ---------------- FLOATING HEARTS ----------------
-
-function floatingHeart(){
-
-const area=document.getElementById("hearts");
-
-const h=document.createElement("div");
-
-h.className="floating-heart";
-
-h.innerHTML="❤️";
-
-h.style.left=Math.random()*100+"vw";
-
-h.style.animationDuration=(Math.random()*6+6)+"s";
-
-h.style.fontSize=(Math.random()*20+18)+"px";
-
-area.appendChild(h);
-
-setTimeout(()=>{
-
-h.remove();
-
-},12000);
-
-}
-
-setInterval(floatingHeart,500);
-
-// ---------------- RESTART ----------------
-
-restart.addEventListener("click",()=>{
-
-location.reload();
-
-});
