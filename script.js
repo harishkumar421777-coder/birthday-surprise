@@ -1,210 +1,212 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+// Pages
+
+const pages = document.querySelectorAll(".page");
+
+function showPage(index){
+pages.forEach(p=>p.classList.remove("active"));
+pages[index].classList.add("active");
 }
 
-body{
-height:100vh;
-overflow:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#ffd6e8,#fff0f6);
+// Elements
+
+const startBtn=document.getElementById("startBtn");
+const heart=document.getElementById("heart");
+const score=document.getElementById("score");
+const gift=document.getElementById("gift");
+const blowBtn=document.getElementById("blowBtn");
+const flame=document.getElementById("flame");
+const restart=document.getElementById("restart");
+const letter=document.getElementById("letter");
+
+// Start
+
+startBtn.onclick=()=>showPage(1);
+
+// Heart Game
+
+let count=0;
+
+heart.onclick=()=>{
+
+count++;
+
+score.innerHTML=`Caught : ${count} / 5`;
+
+if(count<5){
+
+moveHeart();
+
+}else{
+
+setTimeout(()=>{
+
+showPage(2);
+
+},500);
+
 }
 
-.page{
-position:absolute;
-width:100%;
-height:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-opacity:0;
-pointer-events:none;
-transition:.6s;
+};
+
+function moveHeart(){
+
+const card=document.querySelector("#page2 .card");
+
+const maxX=card.clientWidth-120;
+const maxY=card.clientHeight-170;
+
+const x=Math.random()*maxX+20;
+const y=Math.random()*maxY+100;
+
+heart.style.left=x+"px";
+heart.style.top=y+"px";
+
+heart.style.transform="scale(1.3)";
+
+setTimeout(()=>{
+
+heart.style.transform="scale(1)";
+
+},150);
+
 }
 
-.page.active{
-opacity:1;
-pointer-events:auto;
+// Gift
+
+gift.onclick=()=>{
+
+gift.innerHTML="💝";
+
+gift.style.transform="scale(1.2) rotate(15deg)";
+
+createConfetti();
+
+setTimeout(()=>{
+
+showPage(3);
+
+},1000);
+
+};
+
+// Cake
+
+blowBtn.onclick=()=>{
+
+flame.style.display="none";
+
+createConfetti();
+
+setTimeout(()=>{
+
+showPage(4);
+
+typeLetter();
+
+},1000);
+
+};
+
+// Letter
+
+const text=`Happy Birthday My Love ❤️
+
+Every moment with you is a beautiful memory.
+
+Thank you for being in my life.
+
+You make my world brighter every single day.
+
+I promise to always make you smile.
+
+I Love You Forever ❤️`;
+
+let i=0;
+
+function typeLetter(){
+
+letter.innerHTML="";
+
+i=0;
+
+let typing=setInterval(()=>{
+
+letter.innerHTML+=text.charAt(i);
+
+i++;
+
+if(i>=text.length){
+
+clearInterval(typing);
+
 }
 
-.card{
-position:relative;
-width:90%;
-max-width:650px;
-padding:40px;
-text-align:center;
-background:rgba(255,255,255,.45);
-backdrop-filter:blur(18px);
-border-radius:25px;
-box-shadow:0 15px 40px rgba(255,105,180,.2);
-overflow:hidden;
+},40);
+
 }
 
-h1{
-font-family:'Pacifico',cursive;
-font-size:2.8rem;
-color:#ff3d81;
-margin-bottom:20px;
-}
+// Floating Hearts
 
-p{
-font-size:18px;
-color:#555;
-line-height:1.7;
-margin-bottom:20px;
-}
+setInterval(()=>{
 
-button{
-padding:15px 35px;
-border:none;
-border-radius:35px;
-background:#ff4f92;
-color:#fff;
-font-size:16px;
-cursor:pointer;
-transition:.3s;
-}
+const area=document.getElementById("hearts");
 
-button:hover{
-transform:scale(1.08);
-background:#ff2f73;
-}
+const h=document.createElement("div");
 
-#heart{
-position:absolute;
-left:100px;
-top:220px;
-font-size:70px;
-cursor:pointer;
-user-select:none;
-transition:left .35s ease, top .35s ease, transform .2s;
-animation:beat 1s infinite;
-}
+h.className="floating-heart";
 
-#gift{
-font-size:100px;
-cursor:pointer;
-transition:.4s;
-}
+h.innerHTML="❤️";
 
-#gift:hover{
-transform:scale(1.15) rotate(10deg);
-}
+h.style.left=Math.random()*100+"vw";
 
-#cake{
-position:relative;
-width:170px;
-height:140px;
-margin:25px auto;
-}
+h.style.fontSize=(Math.random()*20+15)+"px";
 
-.cake-body{
-position:absolute;
-bottom:0;
-width:170px;
-height:90px;
-background:#ff5d96;
-border-radius:20px;
-}
+h.style.animationDuration=(Math.random()*5+5)+"s";
 
-#flame{
-position:absolute;
-top:-15px;
-left:76px;
-width:18px;
-height:28px;
-background:gold;
-border-radius:50%;
-box-shadow:0 0 20px orange;
-animation:flicker .2s infinite alternate;
-}
+area.appendChild(h);
 
-.gallery img{
-width:240px;
-height:320px;
-object-fit:cover;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.2);
-transition:.4s;
-}
+setTimeout(()=>{
 
-.gallery img:hover{
-transform:scale(1.05);
-}
+h.remove();
 
-#hearts,
-#confetti{
-position:fixed;
-inset:0;
-pointer-events:none;
-overflow:hidden;
-}
+},9000);
 
-.floating-heart{
-position:absolute;
-font-size:20px;
-animation:float 8s linear forwards;
-opacity:.7;
-}
+},500);
 
-.confetti{
-position:absolute;
-width:10px;
-height:16px;
-animation:fall 3s linear forwards;
-}
+// Confetti
 
-@keyframes beat{
-0%,100%{transform:scale(1);}
-50%{transform:scale(1.15);}
-}
+function createConfetti(){
 
-@keyframes flicker{
-from{transform:scale(.9);}
-to{transform:scale(1.1);}
-}
+const area=document.getElementById("confetti");
 
-@keyframes float{
-0%{
-transform:translateY(110vh);
-}
-100%{
-transform:translateY(-100px);
-}
-}
+for(let i=0;i<120;i++){
 
-@keyframes fall{
-0%{
-transform:translateY(-50px) rotate(0);
-opacity:1;
-}
-100%{
-transform:translateY(110vh) rotate(720deg);
-opacity:0;
-}
-}
+const c=document.createElement("div");
 
-@media(max-width:768px){
+c.className="confetti";
 
-.card{
-padding:25px;
-}
+c.style.left=Math.random()*100+"vw";
 
-h1{
-font-size:2rem;
-}
+c.style.background=`hsl(${Math.random()*360},90%,60%)`;
 
-#heart{
-font-size:60px;
-}
+c.style.animationDuration=(Math.random()*2+2)+"s";
 
-.gallery img{
-width:180px;
-height:240px;
+area.appendChild(c);
+
+setTimeout(()=>{
+
+c.remove();
+
+},4000);
+
 }
 
 }
+
+// Replay
+
+restart.onclick=()=>{
+
+location.reload();
+
+};
